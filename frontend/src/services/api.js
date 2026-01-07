@@ -1,4 +1,5 @@
 const API_URL = "https://placement-tracker-backend-15g4.onrender.com/api";
+
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");
   return {
@@ -6,7 +7,6 @@ const getAuthHeaders = () => {
     Authorization: `Bearer ${token}`,
   };
 };
-
 
 export const registerUser = async (data) => {
   const res = await fetch(`${API_URL}/auth/register`, {
@@ -25,64 +25,36 @@ export const loginUser = async (data) => {
   });
   return res.json();
 };
+
 export const getPlacements = async () => {
-  const token = localStorage.getItem("token");
-
   const res = await fetch(`${API_URL}/placements`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: getAuthHeaders(), // ✅ USED HERE
   });
-
-  if (res.status === 401) {
-    localStorage.removeItem("token");
-    window.location.reload();
-    return;
-  }
-
   return res.json();
 };
 
 export const createPlacement = async (data) => {
-  const token = localStorage.getItem("token");
-
-  const res = await fetch("http://localhost:5000/api/placements", {
+  const res = await fetch(`${API_URL}/placements`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    headers: getAuthHeaders(), // ✅ USED HERE
     body: JSON.stringify(data),
   });
-
   return res.json();
 };
-export const deletePlacement = async (id) => {
-  const token = localStorage.getItem("token");
 
+export const deletePlacement = async (id) => {
   const res = await fetch(`${API_URL}/placements/${id}`, {
     method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: getAuthHeaders(), // ✅ USED HERE
   });
-
   return res.json();
 };
 
 export const updatePlacement = async (id, data) => {
-  const token = localStorage.getItem("token");
-
   const res = await fetch(`${API_URL}/placements/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    headers: getAuthHeaders(), // ✅ USED HERE
     body: JSON.stringify(data),
   });
-
   return res.json();
 };
-
-
